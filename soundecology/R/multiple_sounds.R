@@ -510,7 +510,7 @@ multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexi
 
     for (soundfile in wav_files) {
       this_res <- getindex(soundfile, ...)
-      results[soundfile] <- this_res
+      results[[soundfile]] <- this_res
     }
   # }
 
