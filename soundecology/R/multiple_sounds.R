@@ -485,34 +485,34 @@ multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexi
   time0 <- proc.time()
 
   #Use parallel?
-  if (no_cores > 1) {
-    #require(parallel)
-    no_files <- length(wav_files)
-
-    if (no_cores > no_files) {
-      no_cores <- no_files
-      cat("\n The number of cores to use has been reduced because there are less files than cores available\n")
-    }
-
-    cat(paste("\n Running the function ", soundindex, "() on ", no_files, " files using ", no_cores, " cores", "\n\n", sep = ""))
-
-    cl <- makeCluster(no_cores, type = "PSOCK")
-
-    results <- parLapply(cl, wav_files, getindex, inCluster = TRUE, ...)
-
-    #pause to allow all to end
-    Sys.sleep(1)
-
-    stopCluster(cl)
-  }else {
+  # if (no_cores > 1) {
+  #   #require(parallel)
+  #   no_files <- length(wav_files)
+  #
+  #   if (no_cores > no_files) {
+  #     no_cores <- no_files
+  #     cat("\n The number of cores to use has been reduced because there are less files than cores available\n")
+  #   }
+  #
+  #   cat(paste("\n Running the function ", soundindex, "() on ", no_files, " files using ", no_cores, " cores", "\n\n", sep = ""))
+  #
+  #   cl <- makeCluster(no_cores, type = "PSOCK")
+  #
+  #   results <- parLapply(cl, wav_files, getindex, inCluster = TRUE, ...)
+  #
+  #   #pause to allow all to end
+  #   Sys.sleep(1)
+  #
+  #   stopCluster(cl)
+  # }else {
 
     cat(paste(" Running on ", length(wav_files), " files using 1 core", "\n\n", sep = ""))
 
     for (soundfile in wav_files) {
       this_res <- getindex(soundfile, ...)
-      results[[length(results)+1]] <- this_res
+      results[soundfile] <- this_res
     }
-  }
+  # }
 
   #Stop timer
   time1 <- proc.time() - time0
