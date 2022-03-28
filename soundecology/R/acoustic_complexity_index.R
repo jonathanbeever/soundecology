@@ -9,24 +9,24 @@
 
 acoustic_complexity <- function(
   soundfile,
-  minFreq = NA,
-  maxFreq = NA,
+  min_freq = NA,
+  max_freq = NA,
   j = 5,
   fft_w = 512,
   matrix = TRUE,
   bands = TRUE) {
   # Helper Functions
-  check_param <- function(soundfile, minFreq, maxFreq, j, fft_w) {
+  check_param <- function(soundfile, min_freq, max_freq, j, fft_w) {
     # Temp Values
-    MIN <- minFreq
-    MAX <- maxFreq
+    MIN <- min_freq
+    MAX <- max_freq
     J <- j
     FFT_W <- fft_w
 
     # test arguments
     if (is.na(MAX)) {
       MAX <- soundfile@samp.rate / 2
-      cat(paste("\n maxFreq not set, using value of:", MAX, "\n\n"))
+      cat(paste("\n max_freq not set, using value of:", MAX, "\n\n"))
     } else if (MAX > nyquistFreq) {
       cat(
         paste(
@@ -35,7 +35,7 @@ acoustic_complexity <- function(
           nyquistFreq,
           "Hz. But the script was set to measure up to ",
           MAX,
-          "Hz. The value of maxFreq was changed to ",
+          "Hz. The value of max_freq was changed to ",
           nyquistFreq, ".\n\n",
           sep = ""
         )
@@ -46,19 +46,19 @@ acoustic_complexity <- function(
 
     if (is.na(MIN)) {
       MIN <- 0
-      cat(paste("\n minFreq not set, using value of:", MIN, "\n\n"))
+      cat(paste("\n min_freq not set, using value of:", MIN, "\n\n"))
     }
 
     if (is.numeric(as.numeric(MIN))) {
       MIN <- as.numeric(MIN)
     } else {
-      stop(" minFreq is not a number.")
+      stop(" min_freq is not a number.")
     }
 
     if (is.numeric(as.numeric(MAX))) {
       MAX <- as.numeric(MAX)
     } else {
-      stop(" maxFreq is not a number.")
+      stop(" max_freq is not a number.")
     }
 
     if (is.numeric(as.numeric(J))) {
@@ -90,8 +90,8 @@ acoustic_complexity <- function(
       stop(" fft_w is not a number.")
     }
 
-    eval.parent(substitute(minFreq <- MIN))
-    eval.parent(substitute(maxFreq <- MAX))
+    eval.parent(substitute(min_freq <- MIN))
+    eval.parent(substitute(max_freq <- MAX))
     eval.parent(substitute(j <- J))
     eval.parent(substitute(fft_w <- FFT_W))
   }
@@ -132,7 +132,7 @@ acoustic_complexity <- function(
   nyquistFreq <- (samplingrate / 2)
 
   # Checking validity of parameters
-  check_param(soundfile, minFreq, maxFreq, j, fft_w)
+  check_param(soundfile, min_freq, max_freq, j, fft_w)
 
 
   # Stereo file
@@ -158,8 +158,8 @@ acoustic_complexity <- function(
     specLeftFreq <- specLeft$freq
     rm(specLeft)
 
-    minFreqByThousand <- minFreq / 1000
-    maxFreqByThousand <- maxFreq / 1000
+    minFreqByThousand <- min_freq / 1000
+    maxFreqByThousand <- min_freq / 1000
 
     minFreqIndex <- which(
       abs(specLeftFreq - minFreqByThousand) ==
@@ -358,8 +358,8 @@ acoustic_complexity <- function(
     specLeftFreq <- specLeft$freq
     rm(specLeft)
 
-    minFreqByThousand <- minFreq / 1000
-    maxFreqByThousand <- maxFreq / 1000
+    minFreqByThousand <- min_freq / 1000
+    maxFreqByThousand <- max_freq / 1000
 
     minFreqIndex <- which(
       abs(specLeftFreq - minFreqByThousand) ==
