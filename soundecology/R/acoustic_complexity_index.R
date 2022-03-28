@@ -32,13 +32,13 @@ acoustic_complexity <- function(
         paste(
           "\n WARNING:
           The maximum acoustic frequency that this file can use is ",
-           nyquistFreq,
-           "Hz. But the script was set to measure up to ",
-           MAX,
-           "Hz. The value of maxFreq was changed to ",
-           nyquistFreq, ".\n\n",
-           sep = ""
-         )
+          nyquistFreq,
+          "Hz. But the script was set to measure up to ",
+          MAX,
+          "Hz. The value of maxFreq was changed to ",
+          nyquistFreq, ".\n\n",
+          sep = ""
+        )
       )
       MAX <- nyquistFreq
       # break
@@ -78,7 +78,7 @@ acoustic_complexity <- function(
     if (duration %% J != 0) {
       cat(
         paste(
-          round( duration %% j,digits=5),
+          round(duration %% j, digits = 5),
           " seconds have been discarded from output.",
           sep = ""
         )
@@ -105,15 +105,15 @@ acoustic_complexity <- function(
       sum(
         abs(
           spectrum[
-                    freqRow,
-                    minCol:(maxCol - 1)
-                  ] -
-          spectrum[
-                    freqRow,
-                    (minCol + 1):maxCol
-                  ]
-          )
-       )
+            freqRow,
+            minCol:(maxCol - 1)
+          ] -
+            spectrum[
+              freqRow,
+              (minCol + 1):maxCol
+            ]
+        )
+      )
     )
   }
 
@@ -135,7 +135,6 @@ acoustic_complexity <- function(
   check_param(soundfile, minFreq, maxFreq, j, fft_w)
 
 
-
   # Stereo file
   if (soundfile@stereo == TRUE) {
     cat("\n This is a stereo file. Results will be given for each channel.\n")
@@ -146,15 +145,15 @@ acoustic_complexity <- function(
     # matrix of values
     cat("\n Calculating index. Please wait... \n\n")
     specLeft <- spectro(
-                      left,
-                      f = samplingrate,
-                      wl = wlen,
-                      plot = FALSE,
-                      norm = TRUE,
-                      dB = NULL,
-                      scale = FALSE,
-                      wn = "hamming"
-                  )
+      left,
+      f = samplingrate,
+      wl = wlen,
+      plot = FALSE,
+      norm = TRUE,
+      dB = NULL,
+      scale = FALSE,
+      wn = "hamming"
+    )
     specAmpLeft <- specLeft$amp
     specLeftFreq <- specLeft$freq
     rm(specLeft)
@@ -163,13 +162,13 @@ acoustic_complexity <- function(
     maxFreqByThousand <- maxFreq / 1000
 
     minFreqIndex <- which(
-                        abs(specLeftFreq - minFreqByThousand) ==
-                        min(abs(specLeftFreq - minFreqByThousand))
-                      )
+      abs(specLeftFreq - minFreqByThousand) ==
+        min(abs(specLeftFreq - minFreqByThousand))
+    )
     maxFreqIndex <- which(
-                        abs(specLeftFreq - maxFreqByThousand) ==
-                        min(abs(specLeftFreq - maxFreqByThousand))
-                      )
+      abs(specLeftFreq - maxFreqByThousand) ==
+        min(abs(specLeftFreq - maxFreqByThousand))
+    )
 
     if (minFreqIndex < 1) {
       minFreqIndex <- 1
@@ -217,26 +216,26 @@ acoustic_complexity <- function(
 
       # For each j period of time
       D <- sapply(
-              indexes,
-              getD,
-              spectrum = specAmpLeft,
-              freqRow = qIndex,
-              minCol = minCol,
-              maxCol = maxCol,
-              iPerJ = iPerJ
-            )
+        indexes,
+        getD,
+        spectrum = specAmpLeft,
+        freqRow = qIndex,
+        minCol = minCol,
+        maxCol = maxCol,
+        iPerJ = iPerJ
+      )
       sumI <- sapply(
-                  indexes,
-                  sumV,
-                  spectrum = specAmpLeft,
-                  qIndex = qIndex
-                )
+        indexes,
+        sumV,
+        spectrum = specAmpLeft,
+        qIndex = qIndex
+      )
 
       aciLeftVals <- D / sumI
       aciComplexityLeft <- aciComplexityLeft + aciLeftVals
 
       if (matrix) {
-        aciLeftMatrix[qIndex, ] <- aciLeftVals
+        aciLeftMatrix[qIndex,] <- aciLeftVals
       }
 
       if (bands) {
@@ -258,17 +257,17 @@ acoustic_complexity <- function(
 
     # Retrieve spectrogram of right side
     specRight <- spectro(
-                      right,
-                      f = samplingrate,
-                      wl = wlen,
-                      plot = FALSE,
-                      norm = TRUE,
-                      dB = NULL,
-                      scale = FALSE,
-                      wn = "hamming"
-                    )
+      right,
+      f = samplingrate,
+      wl = wlen,
+      plot = FALSE,
+      norm = TRUE,
+      dB = NULL,
+      scale = FALSE,
+      wn = "hamming"
+    )
 
-    specAmpRight <- specRight$amp[minFreqIndex:maxFreqIndex, ]
+    specAmpRight <- specRight$amp[minFreqIndex:maxFreqIndex,]
 
     rm(specRight)
     rm(right)
@@ -278,24 +277,24 @@ acoustic_complexity <- function(
       # For each j period of time
 
       D <- sapply(
-              indexes,
-              getD,
-              spectrum = specAmpRight,
-              freqRow = qIndex,
-              minCol = minCol,
-              maxCol = maxCol,
-              iPerJ = iPerJ
-            )
+        indexes,
+        getD,
+        spectrum = specAmpRight,
+        freqRow = qIndex,
+        minCol = minCol,
+        maxCol = maxCol,
+        iPerJ = iPerJ
+      )
       sumI <- sapply(
-                  indexes,
-                  sumV,
-                  spectrum = specAmpRight,
-                  qIndex = qIndex
-                )
+        indexes,
+        sumV,
+        spectrum = specAmpRight,
+        qIndex = qIndex
+      )
       aciRightVals <- D / sumI
       aciComplexityRight <- aciComplexityRight + aciRightVals
       if (matrix) {
-        aciRightMatrix[qIndex, ] <- aciRightVals
+        aciRightMatrix[qIndex,] <- aciRightVals
       }
       if (bands) {
         aciFlRightVector[qIndex] <- sum(aciRightVals)
@@ -310,8 +309,8 @@ acoustic_complexity <- function(
       aciTotRight <- totalRight
     }
 
-    aciTotLeftByMin <- round( (aciTotLeft / duration) * 60, 2)
-    aciTotRightByMin <- round( (aciTotRight / duration) * 60, 2)
+    aciTotLeftByMin <- round((aciTotLeft / duration) * 60, 2)
+    aciTotRightByMin <- round((aciTotRight / duration) * 60, 2)
 
     cat(
       paste(
@@ -345,15 +344,15 @@ acoustic_complexity <- function(
     # matrix of values
     cat("\n Calculating index. Please wait... \n\n")
     specLeft <- spectro(
-                    left,
-                    f = samplingrate,
-                    wl = wlen,
-                    plot = FALSE,
-                    norm = TRUE,
-                    dB = NULL,
-                    scale = FALSE,
-                    wn = "hamming"
-                )
+      left,
+      f = samplingrate,
+      wl = wlen,
+      plot = FALSE,
+      norm = TRUE,
+      dB = NULL,
+      scale = FALSE,
+      wn = "hamming"
+    )
 
     specAmpLeft <- specLeft$amp
     specLeftFreq <- specLeft$freq
@@ -363,15 +362,15 @@ acoustic_complexity <- function(
     maxFreqByThousand <- maxFreq / 1000
 
     minFreqIndex <- which(
-                        abs(specLeftFreq - minFreqByThousand) ==
-                        min(abs(specLeftFreq - minFreqByThousand))
-                      )
+      abs(specLeftFreq - minFreqByThousand) ==
+        min(abs(specLeftFreq - minFreqByThousand))
+    )
     maxFreqIndex <- which(
-                        abs(specLeftFreq - maxFreqByThousand) ==
-                        min(abs(specLeftFreq - maxFreqByThousand))
-                      )
+      abs(specLeftFreq - maxFreqByThousand) ==
+        min(abs(specLeftFreq - maxFreqByThousand))
+    )
 
-    specAmpLeft <- specAmpLeft[minFreqIndex:maxFreqIndex, ]
+    specAmpLeft <- specAmpLeft[minFreqIndex:maxFreqIndex,]
     rm(left)
 
     # LEFT CHANNEL
@@ -417,25 +416,25 @@ acoustic_complexity <- function(
 
 
       D <- sapply(
-              indexes,
-              getD,
-              spectrum = specAmpLeft,
-              freqRow = qIndex,
-              minCol = minCol,
-              maxCol = maxCol,
-              iPerJ = iPerJ
-            )
+        indexes,
+        getD,
+        spectrum = specAmpLeft,
+        freqRow = qIndex,
+        minCol = minCol,
+        maxCol = maxCol,
+        iPerJ = iPerJ
+      )
       sumI <- sapply(
-                  indexes,
-                  sumV,
-                  spectrum = specAmpLeft,
-                  qIndex = qIndex
-                )
+        indexes,
+        sumV,
+        spectrum = specAmpLeft,
+        qIndex = qIndex
+      )
       aciLeftVals <- D / sumI
 
       aciComplexityLeft <- aciComplexityLeft + aciLeftVals
       if (matrix) {
-        aciLeftMatrix[qIndex, ] <- aciLeftVals
+        aciLeftMatrix[qIndex,] <- aciLeftVals
       }
       if (bands) {
         aciFlLeftVector[qIndex] <- sum(aciLeftVals)
@@ -450,7 +449,7 @@ acoustic_complexity <- function(
       aciTotLeft <- totalLeft
     }
 
-    aciTotLeftByMin <- round( (aciTotLeft / duration) * 60, 2)
+    aciTotLeftByMin <- round((aciTotLeft / duration) * 60, 2)
 
     aciTotRight <- NA
     aciTotRightByMin <- NA
