@@ -15,8 +15,12 @@ acoustic_complexity <- function(
   fft_w = 512,
   matrix = TRUE,
   bands = TRUE) {
+
+  print(c(min_freq, max_freq, j, fft_w))
+
   # Helper Functions
   check_param <- function(soundfile, min_freq, max_freq, j, fft_w) {
+    print(c(min_freq, max_freq, j, fft_w))
     # Temp Values
     MIN <- min_freq
     MAX <- max_freq
