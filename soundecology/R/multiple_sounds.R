@@ -5,9 +5,9 @@
 #
 #
 
-multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexity", "acoustic_diversity", "acoustic_evenness", "bioacoustic_index", "H"), no_cores = 1, flac = FALSE, from = NA, to = NA, units = NA, ...) {
+multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexity", "acoustic_diversity", "acoustic_evenness", "bioacoustic_index", "H", "root_mean_square"), no_cores = 1, flac = FALSE, from = NA, to = NA, units = NA, ...) {
 
-  if (any(soundindex %in% c("ndsi", "acoustic_complexity", "acoustic_diversity", "acoustic_evenness", "bioacoustic_index", "H")) == FALSE) {
+  if (any(soundindex %in% c("ndsi", "acoustic_complexity", "acoustic_diversity", "acoustic_evenness", "bioacoustic_index", "H", "root_mean_square")) == FALSE) {
     stop(paste("Unknown function", soundindex))
   }
 

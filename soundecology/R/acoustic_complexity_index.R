@@ -25,7 +25,7 @@ acoustic_complexity <- function(
     FFT_W <- fft_w
 
     # test arguments
-    if (is.na(MAX)) {
+    if (is.null(MAX) || is.na(MAX) || MAX <= 0) {
       MAX <- soundfile@samp.rate / 2
       cat(paste("\n max_freq not set, using value of:", MAX, "\n\n"))
     } else if (MAX > nyquistFreq) {
@@ -45,7 +45,7 @@ acoustic_complexity <- function(
       # break
     }
 
-    if (is.na(MIN)) {
+    if (is.null(MIN) || is.na(MIN) || MIN < 0) {
       MIN <- 0
       cat(paste("\n min_freq not set, using value of:", MIN, "\n\n"))
     }
