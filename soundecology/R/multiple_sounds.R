@@ -477,6 +477,31 @@ multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexi
       return(return_list)
     }
 
+  } else if (soundindex == "root_mean_square") {
+    if (flac == TRUE) {
+      soundfile_path <- get_wav(directory, soundfile)
+    }else {
+      if (.Platform$OS.type == "windows") {
+        soundfile_path <- paste(directory, "\\", soundfile, sep = "")
+      }else {
+        soundfile_path <- paste(directory, "/", soundfile, sep = "")
+      }
+    }
+
+    if (is.na(from) == FALSE) {
+      this_soundfile <- readWave(soundfile_path, from = from, to = to, units = units)
+    }else {
+      this_soundfile <- readWave(soundfile_path)
+    }
+
+    rmsL <- sqrt(mean(this_soundfile@left^2))
+    rmsR <- sqrt(mean(this_soundfile@right^2))
+
+    if (flac == TRUE) {
+      file.remove(soundfile_path)
+    }
+
+    return(list(rmsL = rmsL, rmsR = rmsR))
   }
 
   results <- list()
@@ -506,12 +531,12 @@ multiple_sounds <- function(directory, soundindex = c("ndsi", "acoustic_complexi
   #   stopCluster(cl)
   # }else {
 
-    cat(paste(" Running on ", length(wav_files), " files using 1 core", "\n\n", sep = ""))
+  cat(paste(" Running on ", length(wav_files), " files using 1 core", "\n\n", sep = ""))
 
-    for (soundfile in wav_files) {
-      this_res <- getindex(soundfile, ...)
-      results[[soundfile]] <- this_res
-    }
+  for (soundfile in wav_files) {
+    this_res <- getindex(soundfile, ...)
+    results[[soundfile]] <- this_res
+  }
   # }
 
   #Stop timer
