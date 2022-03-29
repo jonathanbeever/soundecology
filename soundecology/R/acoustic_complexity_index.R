@@ -203,9 +203,9 @@ acoustic_complexity <- function(
     # Left channel
     # For each frequency bin fl
     for (qIndex in 1:numSpecRows) {
-      print(c(specAmpLeft, qIndex, iPerJ))
+      print(c(qIndex, iPerJ))
       print(c((1 * iPerJ) - iPerJ + 1, 1 * iPerJ))
-
+      return(NA)
       # For each j period of time
       D <- sapply(
         indexes,
