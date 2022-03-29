@@ -16,11 +16,8 @@ acoustic_complexity <- function(
   matrix = TRUE,
   bands = TRUE) {
 
-  print(c(min_freq, max_freq, j, fft_w))
-
   # Helper Functions
   check_param <- function(soundfile, min_freq, max_freq, j, fft_w) {
-    print(c(min_freq, max_freq, j, fft_w))
     # Temp Values
     MIN <- min_freq
     MAX <- max_freq
@@ -101,29 +98,18 @@ acoustic_complexity <- function(
   }
 
   # function that gets the difference of values
-  getD <- function(index, spectrum, freqRow, minCol, maxCol, iPerJ) {
-    minCol <- index * iPerJ - iPerJ + 1
+  getD <- function(index, spectrum, freqRow, iPerJ) {
+    minCol <- (index * iPerJ) - iPerJ + 1
     maxCol <- index * iPerJ
 
     return(
-      sum(
-        abs(
-          spectrum[
-            freqRow,
-            minCol:(maxCol - 1)
-          ] -
-            spectrum[
-              freqRow,
-              (minCol + 1):maxCol
-            ]
-        )
-      )
+      sum(abs(spectrum[freqRow, minCol:(maxCol - 1)] - spectrum[freqRow, (minCol + 1):maxCol]))
     )
   }
 
   # Vectorized function to get sum of amps within range/freq_band
   sumV <- function(index, spectrum, qIndex) {
-    minCol <- index * iPerJ - iPerJ + 1
+    minCol <- (index * iPerJ) - iPerJ + 1
     maxCol <- index * iPerJ
     return(sum(spectrum[qIndex, minCol:maxCol]))
   }
@@ -224,8 +210,6 @@ acoustic_complexity <- function(
         getD,
         spectrum = specAmpLeft,
         freqRow = qIndex,
-        minCol = minCol,
-        maxCol = maxCol,
         iPerJ = iPerJ
       )
       sumI <- sapply(
@@ -285,8 +269,6 @@ acoustic_complexity <- function(
         getD,
         spectrum = specAmpRight,
         freqRow = qIndex,
-        minCol = minCol,
-        maxCol = maxCol,
         iPerJ = iPerJ
       )
       sumI <- sapply(
@@ -424,8 +406,6 @@ acoustic_complexity <- function(
         getD,
         spectrum = specAmpLeft,
         freqRow = qIndex,
-        minCol = minCol,
-        maxCol = maxCol,
         iPerJ = iPerJ
       )
       sumI <- sapply(
