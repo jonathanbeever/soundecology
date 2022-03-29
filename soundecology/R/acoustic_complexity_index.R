@@ -102,6 +102,10 @@ acoustic_complexity <- function(
     minCol <- (index * iPerJ) - iPerJ + 1
     maxCol <- index * iPerJ
 
+    print(c(index, spectrum, freqRow, iPerJ))
+    print(c(minCol, maxCol))
+    print(c(spectrum[freqRow, minCol:(maxCol - 1)], spectrum[freqRow, (minCol + 1):maxCol]))
+
     return(
       sum(abs(spectrum[freqRow, minCol:(maxCol - 1)] - spectrum[freqRow, (minCol + 1):maxCol]))
     )
